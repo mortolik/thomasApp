@@ -18,6 +18,7 @@ public:
 
 private:
     SolverModel* m_model;
+    QTabWidget* m_tabWidget;
     QTableWidget* m_table;
     QChartView* m_chartViewU_V;    // График для u и v
     QChartView* m_chartViewDiff;   // График для разности u - v

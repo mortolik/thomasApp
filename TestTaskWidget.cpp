@@ -7,26 +7,44 @@ TestTaskWidget::TestTaskWidget(SolverModel* model, QWidget *parent)
     // Создаем layout для виджета
     QVBoxLayout *layout = new QVBoxLayout(this);
 
-    // Создаем таблицу
-    m_table = new QTableWidget(this);
-    m_table->setColumnCount(4); // 4 столбца: x_i, u(x_i), v(x_i), |u(x_i) - v(x_i)|
-    m_table->setHorizontalHeaderLabels({"x_i", "u(x_i)", "v(x_i)", "|u(x_i) - v(x_i)|"});
-    m_table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    layout->addWidget(m_table);
+    // Создаем QTabWidget для вкладок
+    m_tabWidget = new QTabWidget(this);
+    layout->addWidget(m_tabWidget);
+
+    // Создаем вкладку "Графики"
+    QWidget *graphTab = new QWidget();
+    QVBoxLayout *graphLayout = new QVBoxLayout(graphTab);
 
     // Создаем первый график для u и v
     QChart *chartU_V = new QChart();
     chartU_V->setTitle("Графики u и v");
     m_chartViewU_V = new QChartView(chartU_V);
     m_chartViewU_V->setRenderHint(QPainter::Antialiasing);
-    layout->addWidget(m_chartViewU_V);
+    graphLayout->addWidget(m_chartViewU_V);
 
     // Создаем второй график для разности u - v
     QChart *chartDiff = new QChart();
     chartDiff->setTitle("Разность u - v");
     m_chartViewDiff = new QChartView(chartDiff);
     m_chartViewDiff->setRenderHint(QPainter::Antialiasing);
-    layout->addWidget(m_chartViewDiff);
+    graphLayout->addWidget(m_chartViewDiff);
+
+    // Добавляем вкладку "Графики"
+    m_tabWidget->addTab(graphTab, "Графики");
+
+    // Создаем вкладку "Таблица"
+    QWidget *tableTab = new QWidget();
+    QVBoxLayout *tableLayout = new QVBoxLayout(tableTab);
+
+    // Создаем таблицу
+    m_table = new QTableWidget(this);
+    m_table->setColumnCount(4); // 4 столбца: x_i, u(x_i), v(x_i), |u(x_i) - v(x_i)|
+    m_table->setHorizontalHeaderLabels({"x_i", "u(x_i)", "v(x_i)", "|u(x_i) - v(x_i)|"});
+    m_table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    tableLayout->addWidget(m_table);
+
+    // Добавляем вкладку "Таблица"
+    m_tabWidget->addTab(tableTab, "Таблица");
 
     setLayout(layout);
 }

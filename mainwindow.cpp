@@ -33,11 +33,12 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 MainWindow::~MainWindow() {
-    // Автоматическое удаление объектов, так как они являются дочерними
+    delete m_model;
+    delete m_taskWidget;
 }
 
 void MainWindow::runTask() {
     // Запускаем задачу и обновляем таблицу
     ResultTask result = m_model->runTask(0, 1000); // Пример: тестовая задача с 100 точками
-    m_taskWidget->updateTable(result);
+    m_taskWidget->updateData(result);
 }

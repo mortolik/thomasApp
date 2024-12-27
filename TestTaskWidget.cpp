@@ -11,6 +11,9 @@ TestTaskWidget::TestTaskWidget(SolverModel* model, QWidget *parent)
     m_tabWidget = new QTabWidget(this);
     layout->addWidget(m_tabWidget);
 
+    m_infoLabel = new QLabel(this);
+    layout->addWidget(m_infoLabel);
+
     // Создаем вкладку "Графики"
     QWidget *graphTab = new QWidget();
     QVBoxLayout *graphLayout = new QVBoxLayout(graphTab);
@@ -107,4 +110,17 @@ void TestTaskWidget::updateData(const ResultTask& result) {
     m_chartViewDiff->chart()->createDefaultAxes();
     m_chartViewDiff->chart()->axisX()->setTitleText("x");
     m_chartViewDiff->chart()->axisY()->setTitleText("Разность u - v");
+
+    updateInfoLabel(result);
+}
+void TestTaskWidget::updateInfoLabel(const ResultTask& result) {
+    // Формируем текст справки
+    QString info;
+    info += QString("Для решения задачи использована равномерная сетка с числом разбиений n = %1.\n").arg(result.x_vector.size() - 1);
+    info += "Задача должна быть решена с погрешностью не более ε = 0.5⋅10⁻⁶.\n";
+    info += QString("Задача решена с погрешностью ε₁ = %1.\n").arg(result.max_error);
+    info += QString("Максимальное отклонение аналитического и численного решений наблюдается в точке x = %1.\n").arg(result.max_error_x);
+
+    // Устанавливаем текст в QLabel
+    m_infoLabel->setText(info);
 }

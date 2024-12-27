@@ -146,7 +146,6 @@ double SolverModel::ACurrentMain(double x_previous, double x_current) {
 // Реализация метода runTask
 ResultTask SolverModel::runTask(int task, int separatingCount) {
     ResultTask result;
-    h = (b - a) / separatingCount;
 
     if (task == 1) {
         taskCalculation(separatingCount * 2, result, false);
@@ -173,6 +172,8 @@ void SolverModel::taskCalculation(int separatingCount, ResultTask& result, bool 
     std::vector<double> a_vector;
     std::vector<double> phi_vector;
     std::vector<double> d_vector;
+
+    h = (b - a) / separatingCount;
 
     std::vector<double> x_vector = { XCurrent(0) };
     for (int i = 1; i <= separatingCount; i++) {
@@ -221,7 +222,8 @@ void SolverModel::errorCalculation(int elementQuantity, ResultTask& result, bool
     result.max_error = 0.;
     result.error_vector.clear();
     for (int i = 0; i <= elementQuantity; i++) {
-        double error = isTestTask ? std::abs(result.u_vector[i] - result.v_vector[i]) : std::abs(result.v_vector[i] - result.v_double_counting_vector[i * 2]);
+        double error = isTestTask ? std::abs(result.u_vector[i] - result.v_vector[i])
+                                  : std::abs(result.v_vector[i] - result.v_double_counting_vector[i * 2]);
         result.error_vector.push_back(error);
         if (result.max_error < error) {
             result.max_error = error;

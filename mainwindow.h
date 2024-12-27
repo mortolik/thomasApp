@@ -2,8 +2,10 @@
 #define MAINWINDOW_H
 
 #include "SolverModel.h"
+#include "SolverWidget.h"
 #include "TestTaskWidget.h"
 #include <QMainWindow>
+#include "MainTaskWidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -21,9 +23,11 @@ public:
 
 private slots:
     void runTask();
+    void onTabChanged(int index);
 
 private:
     SolverModel* m_model;         // Модель для вычислений
-    TestTaskWidget* m_taskWidget; // Виджет для отображения таблицы
+
+    SolverWidget *m_solverWidget;
 };
 #endif // MAINWINDOW_H

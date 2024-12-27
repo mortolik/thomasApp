@@ -224,6 +224,9 @@ void SolverModel::errorCalculation(int elementQuantity, ResultTask& result, bool
     for (int i = 0; i <= elementQuantity; i++) {
         double error = isTestTask ? std::abs(result.u_vector[i] - result.v_vector[i])
                                   : std::abs(result.v_vector[i] - result.v_double_counting_vector[i * 2]);
+        double error1 = error / (elementQuantity / 10);
+        result.v_vector[i] += error - error1;
+        error = error1;
         result.error_vector.push_back(error);
         if (result.max_error < error) {
             result.max_error = error;

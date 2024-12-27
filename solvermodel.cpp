@@ -7,65 +7,55 @@
 const double mu1 = 0., mu2 = 0., alpha1 = 0., beta1 = mu1, v0 = mu1, vn = mu2;
 double a = 0., b = 1., h;
 const double ksi = 0.5; // точка разрыва
-
+namespace Thomas
+{
 SolverModel::SolverModel(QObject* parent)
     : QObject(parent) {}
 
-// Реализация функции u1
 double SolverModel::u1(double x) {
     const double c1 = 0.06393352077;
     const double c2 = -0.06393352077;
     return (c1 * exp(2 * x / 3) + c2 * exp(-2 * x / 3));
 }
 
-// Реализация функции u2
 double SolverModel::u2(double x) {
     const double c1_hat = -0.1014378994;
     const double c2_hat = -1.850734449;
     return (c1_hat * exp(2 * x) + c2_hat * exp(-2 * x) + 1);
 }
 
-// Реализация метода UCurrent
 double SolverModel::UCurrent(double x) {
     return (x < ksi) ? u1(x) : u2(x);
 }
 
-// Реализация метода XCurrent
 double SolverModel::XCurrent(double i) {
     return a + i * h;
 }
 
-// Реализация метода ACapitalCurrent
 double SolverModel::ACapitalCurrent(double a_current) {
     return a_current / (h * h);
 }
 
-// Реализация метода CCapitalCurrent
 double SolverModel::CCapitalCurrent(double a_current, double a_next, double d_current) {
     return (a_current + a_next) / (h * h) + d_current;
 }
 
-// Реализация метода BCapitalCurrent
 double SolverModel::BCapitalCurrent(double a_next) {
     return a_next / (h * h);
 }
 
-// Реализация метода AlphaNext
 double SolverModel::AlphaNext(double alpha_current, double a_capital_current_value, double b_capital_current_value, double c_capital_current_value) {
     return b_capital_current_value / (c_capital_current_value - a_capital_current_value * alpha_current);
 }
 
-// Реализация метода BetaNext
 double SolverModel::BetaNext(double alpha_current, double phi_current, double beta_current, double a_capital_current_value, double b_capital_current_value, double c_capital_current_value) {
     return (phi_current + a_capital_current_value * beta_current) / (c_capital_current_value - a_capital_current_value * alpha_current);
 }
 
-// Реализация метода VCurrent
 double SolverModel::VCurrent(double v_next, double alpha_next, double beta_next, int i, std::vector<double> x_vector) {
     return (alpha_next * v_next + beta_next);
 }
 
-// Реализация метода PhiCurrentTest
 double SolverModel::PhiCurrentTest(double x_previous, double x_next) {
     double result = 0.;
     if (ksi >= x_next) {
@@ -78,7 +68,6 @@ double SolverModel::PhiCurrentTest(double x_previous, double x_next) {
     return result;
 }
 
-// Реализация метода DCurrentTest
 double SolverModel::DCurrentTest(double x_previous, double x_next) {
     double result = 0.;
     if (ksi >= x_previous) {
@@ -91,7 +80,6 @@ double SolverModel::DCurrentTest(double x_previous, double x_next) {
     return result;
 }
 
-// Реализация метода ACurrentTest
 double SolverModel::ACurrentTest(double x_previous, double x_current, double h) {
     double result = 0.;
     if (ksi >= x_current) {
@@ -104,7 +92,6 @@ double SolverModel::ACurrentTest(double x_previous, double x_current, double h) 
     return result;
 }
 
-// Реализация метода PhiCurrentMain
 double SolverModel::PhiCurrentMain(double x_previous, double x_next) {
     double result = 0;
     if (ksi <= x_previous) {
@@ -117,7 +104,6 @@ double SolverModel::PhiCurrentMain(double x_previous, double x_next) {
     return result;
 }
 
-// Реализация метода DCurrentMain
 double SolverModel::DCurrentMain(double x_previous, double x_next) {
     double result = 0.;
     if (ksi >= x_next) {
@@ -130,7 +116,6 @@ double SolverModel::DCurrentMain(double x_previous, double x_next) {
     return result;
 }
 
-// Реализация метода ACurrentMain
 double SolverModel::ACurrentMain(double x_previous, double x_current) {
     double result = 0.;
     if (ksi >= x_current) {
@@ -143,7 +128,6 @@ double SolverModel::ACurrentMain(double x_previous, double x_current) {
     return result;
 }
 
-// Реализация метода runTask
 ResultTask SolverModel::runTask(int task, int separatingCount) {
     ResultTask result;
 
@@ -161,7 +145,6 @@ ResultTask SolverModel::runTask(int task, int separatingCount) {
     return result;
 }
 
-// Реализация метода taskCalculation
 void SolverModel::taskCalculation(int separatingCount, ResultTask& result, bool isTestTask) {
     std::vector<double> v_vector = {vn};
     std::vector<double> alpha_vector = {alpha1};
@@ -209,7 +192,6 @@ void SolverModel::taskCalculation(int separatingCount, ResultTask& result, bool 
     result.x_vector = x_vector;
 }
 
-// Реализация метода exactSolutionCalculation
 void SolverModel::exactSolutionCalculation(int separatingCount, ResultTask& result) {
     result.u_vector.clear();
     for (int i = 0; i <= separatingCount; i++) {
@@ -217,7 +199,6 @@ void SolverModel::exactSolutionCalculation(int separatingCount, ResultTask& resu
     }
 }
 
-// Реализация метода errorCalculation
 void SolverModel::errorCalculation(int elementQuantity, ResultTask& result, bool isTestTask) {
     result.max_error = 0.;
     result.error_vector.clear();
@@ -233,4 +214,5 @@ void SolverModel::errorCalculation(int elementQuantity, ResultTask& result, bool
             result.max_error_x = XCurrent(i);
         }
     }
+}
 }

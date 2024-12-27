@@ -1,14 +1,19 @@
-#ifndef TESTTASKWIDGET_H
-#define TESTTASKWIDGET_H
+#pragma once
 
 #include <QWidget>
-#include <QLabel>
-#include <QTableWidget>
-#include "SolverModel.h"
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
 
+QT_FORWARD_DECLARE_CLASS(QLabel)
+QT_FORWARD_DECLARE_CLASS(QTabWidget)
+QT_FORWARD_DECLARE_CLASS(QTableWidget)
+
 using namespace QtCharts;
+
+namespace Thomas
+{
+class SolverModel;
+struct ResultTask;
 
 class TestTaskWidget : public QWidget {
     Q_OBJECT
@@ -23,8 +28,8 @@ private:
     QTabWidget* m_tabWidget;
     QTableWidget* m_table;
     QLabel* m_infoLabel{nullptr};
-    QChartView* m_chartViewU_V;    // График для u и v
-    QChartView* m_chartViewDiff;   // График для разности u - v
+    QChartView* m_chartViewU_V;
+    QChartView* m_chartViewDiff;
 };
+}
 
-#endif // TESTTASKWIDGET_H

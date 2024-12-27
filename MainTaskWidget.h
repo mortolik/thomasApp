@@ -1,17 +1,21 @@
-#ifndef MAINTASKWIDGET_H
-#define MAINTASKWIDGET_H
+#pragma once
 
-#include <QLabel>
 #include <QWidget>
 #include <QtCharts/QChartView>
 #include <QtCharts/QLineSeries>
-#include <QTableWidget>
-#include <QTabWidget>
-#include "SolverModel.h"
+
+QT_FORWARD_DECLARE_CLASS(QLabel)
+QT_FORWARD_DECLARE_CLASS(QTabWidget)
+QT_FORWARD_DECLARE_CLASS(QTableWidget)
 
 QT_CHARTS_USE_NAMESPACE
+namespace Thomas
+{
+class SolverModel;
+struct ResultTask;
 
-    class MainTaskWidget : public QWidget {
+class MainTaskWidget : public QWidget
+{
     Q_OBJECT
 
 public:
@@ -27,5 +31,4 @@ private:
     QChartView* m_chartViewV_V2;    // График для V и V2
     QChartView* m_chartViewDiff;    // График для разности V - V2
 };
-
-#endif // MAINTASKWIDGET_H
+}

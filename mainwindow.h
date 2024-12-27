@@ -1,13 +1,16 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QSpinBox>
-#include "SolverModel.h"
-#include "SolverWidget.h"
-#include "TestTaskWidget.h"
+#include <QObject>
 #include <QMainWindow>
-#include "MainTaskWidget.h"
 
+QT_FORWARD_DECLARE_CLASS(QSpinBox);
+
+namespace Thomas
+{
+class SolverModel;
+class SolverWidget;
+}
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -26,10 +29,10 @@ private slots:
     void runTask();
 
 private:
-    SolverModel* m_model;         // Модель для вычислений
+    Thomas::SolverModel* m_model {nullptr};
 
-    SolverWidget *m_solverWidget;
+    Thomas::SolverWidget *m_solverWidget {nullptr};
 
-    QSpinBox* m_spinBox;
+    QSpinBox* m_spinBox {nullptr};
 };
 #endif // MAINWINDOW_H

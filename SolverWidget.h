@@ -1,11 +1,14 @@
-#ifndef SOLVERWIDGET_H
-#define SOLVERWIDGET_H
+#pragma once
 
 #include <QWidget>
-#include <QTabWidget>
-#include "TestTaskWidget.h"
-#include "MainTaskWidget.h"
-#include "SolverModel.h"
+
+QT_FORWARD_DECLARE_CLASS(QTabWidget)
+
+namespace Thomas
+{
+class TestTaskWidget;
+class MainTaskWidget;
+class SolverModel;
 
 class SolverWidget : public QWidget {
     Q_OBJECT
@@ -14,13 +17,12 @@ public:
     explicit SolverWidget(SolverModel* model, QWidget *parent = nullptr);
     TestTaskWidget* getTestTaskWidget() const;
     MainTaskWidget* getMainTaskWidget() const;
-    int currentIndex() const; // Возвращает индекс текущей вкладки
+    int currentIndex() const;
 signals:
-    void currentTabChanged(int index); // Сигнал о переключении вкладки
+    void currentTabChanged(int index);
 private:
     QTabWidget* m_tabWidget;
     TestTaskWidget* m_testTaskWidget;
     MainTaskWidget* m_mainTaskWidget;
 };
-
-#endif // SOLVERWIDGET_H
+}

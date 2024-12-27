@@ -1,9 +1,10 @@
-#ifndef SOLVERMODEL_H
-#define SOLVERMODEL_H
+#pragma once
 
 #include <QObject>
-#include <vector>
+QT_FORWARD_DECLARE_CLASS(vector)
 
+namespace Thomas
+{
 struct ResultTask {
     std::vector<double> x_vector;
     std::vector<double> u_vector;
@@ -49,5 +50,5 @@ private:
     double u1(double x);
     double u2(double x);
 };
+}
 
-#endif // SOLVERMODEL_H

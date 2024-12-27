@@ -1,20 +1,24 @@
-#include "TestTaskWidget.h"
+#include <QLabel>
+#include <QTabWidget>
 #include <QVBoxLayout>
 #include <QHeaderView>
+#include <QTableWidget>
 
+#include "TestTaskWidget.h"
+#include "SolverModel.h"
+
+namespace Thomas
+{
 TestTaskWidget::TestTaskWidget(SolverModel* model, QWidget *parent)
     : QWidget(parent), m_model(model) {
-    // Создаем layout для виджета
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     m_infoLabel = new QLabel(this);
     layout->addWidget(m_infoLabel);
 
-    // Создаем QTabWidget для вкладок
     m_tabWidget = new QTabWidget(this);
     layout->addWidget(m_tabWidget);
 
-    // Создаем вкладку "Графики"
     QWidget *graphTab = new QWidget();
     QVBoxLayout *graphLayout = new QVBoxLayout(graphTab);
 
@@ -32,28 +36,23 @@ TestTaskWidget::TestTaskWidget(SolverModel* model, QWidget *parent)
     m_chartViewDiff->setRenderHint(QPainter::Antialiasing);
     graphLayout->addWidget(m_chartViewDiff);
 
-    // Добавляем вкладку "Графики"
     m_tabWidget->addTab(graphTab, "Графики");
 
-    // Создаем вкладку "Таблица"
     QWidget *tableTab = new QWidget();
     QVBoxLayout *tableLayout = new QVBoxLayout(tableTab);
 
-    // Создаем таблицу
     m_table = new QTableWidget(this);
     m_table->setColumnCount(4); // 4 столбца: x_i, u(x_i), v(x_i), |u(x_i) - v(x_i)|
     m_table->setHorizontalHeaderLabels({"x_i", "u(x_i)", "v(x_i)", "|u(x_i) - v(x_i)|"});
     m_table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     tableLayout->addWidget(m_table);
 
-    // Добавляем вкладку "Таблица"
     m_tabWidget->addTab(tableTab, "Таблица");
 
     setLayout(layout);
 }
 
 void TestTaskWidget::updateData(const ResultTask& result) {
-    // Очищаем таблицу и графики перед обновлением
     m_table->setRowCount(0);
     m_chartViewU_V->chart()->removeAllSeries();
     m_chartViewDiff->chart()->removeAllSeries();
@@ -73,14 +72,12 @@ void TestTaskWidget::updateData(const ResultTask& result) {
     QLineSeries *seriesDiff = new QLineSeries();
     seriesDiff->setName("u(x) - v(x)");
 
-    // Заполняем таблицу и серии данными
     for (size_t i = 0; i < result.x_vector.size(); ++i) {
         double x = result.x_vector[i];
         double u = result.u_vector[i];
         double v = result.v_vector[i];
         double diff = std::abs(u - v);
 
-        // Добавляем строку в таблицу
         int row = m_table->rowCount();
         m_table->insertRow(row);
         m_table->setItem(row, 0, new QTableWidgetItem(QString::number(x, 'f', 15)));
@@ -88,25 +85,20 @@ void TestTaskWidget::updateData(const ResultTask& result) {
         m_table->setItem(row, 2, new QTableWidgetItem(QString::number(v, 'f', 15)));
         m_table->setItem(row, 3, new QTableWidgetItem(QString::number(diff, 'f', 15)));
 
-        // Добавляем точки в серии
         seriesU->append(x, u);
         seriesV->append(x, v);
         seriesDiff->append(x, diff);
     }
 
-    // Добавляем серии на первый график
     m_chartViewU_V->chart()->addSeries(seriesU);
     m_chartViewU_V->chart()->addSeries(seriesV);
 
-    // Настраиваем оси для первого графика
     m_chartViewU_V->chart()->createDefaultAxes();
     m_chartViewU_V->chart()->axisX()->setTitleText("x");
     m_chartViewU_V->chart()->axisY()->setTitleText("Значения");
 
-    // Добавляем серию на второй график
     m_chartViewDiff->chart()->addSeries(seriesDiff);
 
-    // Настраиваем оси для второго графика
     m_chartViewDiff->chart()->createDefaultAxes();
     m_chartViewDiff->chart()->axisX()->setTitleText("x");
     m_chartViewDiff->chart()->axisY()->setTitleText("Разность u - v");
@@ -123,4 +115,5 @@ void TestTaskWidget::updateInfoLabel(const ResultTask& result) {
 
     // Устанавливаем текст в QLabel
     m_infoLabel->setText(info);
+}
 }

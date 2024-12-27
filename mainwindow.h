@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QSpinBox>
 #include "SolverModel.h"
 #include "SolverWidget.h"
 #include "TestTaskWidget.h"
@@ -29,5 +30,7 @@ private:
     SolverModel* m_model;         // Модель для вычислений
 
     SolverWidget *m_solverWidget;
+
+    QSpinBox* m_spinBox;
 };
 #endif // MAINWINDOW_H

@@ -26,9 +26,6 @@ MainWindow::MainWindow(QWidget *parent)
     QPushButton *runButton = new QPushButton("Run Task", this);
     connect(runButton, &QPushButton::clicked, this, &MainWindow::runTask);
 
-    // Подключаем обработчик переключения вкладок
-    connect(m_solverWidget, &SolverWidget::currentTabChanged, this, &MainWindow::onTabChanged);
-
     // Настраиваем layout
     QWidget *centralWidget = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout(centralWidget);
@@ -43,22 +40,17 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow() {}
 
 void MainWindow::runTask() {
-    // Запускаем задачу для активной вкладки
-    onTabChanged(m_solverWidget->currentIndex());
-}
-
-void MainWindow::onTabChanged(int index) {
     // Получаем количество узлов из спинбокса
     int separatingCount = m_spinBox->value();
 
-    // Определяем номер задачи (0 - Test, 1 - Main)
-    int taskNumber = index;
+    // Определяем номер задачи (0 - Test, 1 - Main) на основе активной вкладки
+    int taskNumber = m_solverWidget->currentIndex();
 
     // Выполняем задачу
     ResultTask result = m_model->runTask(taskNumber, separatingCount);
 
     // Обновляем данные в активной вкладке
-    if (index == 0) { // Вкладка "Test"
+    if (taskNumber == 0) { // Вкладка "Test"
         m_solverWidget->getTestTaskWidget()->updateData(result);
     } else { // Вкладка "Main"
         m_solverWidget->getMainTaskWidget()->updateData(result);

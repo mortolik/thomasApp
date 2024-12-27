@@ -24,7 +24,6 @@ public:
 
 private slots:
     void runTask();
-    void onTabChanged(int index);
 
 private:
     SolverModel* m_model;         // Модель для вычислений

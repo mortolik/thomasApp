@@ -5,6 +5,7 @@
 #include <QSpinBox>
 #include <QLabel>
 #include <QHBoxLayout>
+#include <QGroupBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent) {
@@ -12,26 +13,35 @@ MainWindow::MainWindow(QWidget *parent)
     m_model = new SolverModel(this);
     m_solverWidget = new SolverWidget(m_model, this);
 
+    // Создаем группу для кнопки и спинбокса
+    QGroupBox *controlGroupBox = new QGroupBox("Управление", this);
+    QHBoxLayout *controlLayout = new QHBoxLayout(controlGroupBox);
+
     // Создаем спинбокс для ввода количества узлов
-    QHBoxLayout *spinBoxLayout = new QHBoxLayout();
-    QLabel *spinBoxLabel = new QLabel("Количество узлов:", this);
-    m_spinBox = new QSpinBox(this);
-    m_spinBox->setMinimum(10); // Минимальное количество узлов
+    QLabel *spinBoxLabel = new QLabel("Количество узлов:", controlGroupBox);
+    m_spinBox = new QSpinBox(controlGroupBox);
+    m_spinBox->setMinimumWidth(60);
+    m_spinBox->setMinimum(0); // Минимальное количество узлов
     m_spinBox->setMaximum(10000); // Максимальное количество узлов
     m_spinBox->setValue(1000); // Значение по умолчанию
-    spinBoxLayout->addWidget(spinBoxLabel);
-    spinBoxLayout->addWidget(m_spinBox);
 
     // Создаем кнопку для запуска задачи
-    QPushButton *runButton = new QPushButton("Run Task", this);
+    QPushButton *runButton = new QPushButton("Run Task", controlGroupBox);
     connect(runButton, &QPushButton::clicked, this, &MainWindow::runTask);
 
-    // Настраиваем layout
+    // Добавляем спинбокс и кнопку в layout группы
+    controlLayout->addWidget(spinBoxLabel);
+    controlLayout->addWidget(m_spinBox);
+    controlLayout->addWidget(runButton);
+
+    // Выравниваем элементы по левой стороне
+    controlLayout->setAlignment(Qt::AlignLeft);
+
+    // Настраиваем layout главного окна
     QWidget *centralWidget = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout(centralWidget);
+    layout->addWidget(controlGroupBox); // Добавляем группу
     layout->addWidget(m_solverWidget);
-    layout->addLayout(spinBoxLayout); // Добавляем спинбокс
-    layout->addWidget(runButton);
     centralWidget->setLayout(layout);
 
     setCentralWidget(centralWidget);

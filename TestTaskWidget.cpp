@@ -7,12 +7,12 @@ TestTaskWidget::TestTaskWidget(SolverModel* model, QWidget *parent)
     // Создаем layout для виджета
     QVBoxLayout *layout = new QVBoxLayout(this);
 
+    m_infoLabel = new QLabel(this);
+    layout->addWidget(m_infoLabel);
+
     // Создаем QTabWidget для вкладок
     m_tabWidget = new QTabWidget(this);
     layout->addWidget(m_tabWidget);
-
-    m_infoLabel = new QLabel(this);
-    layout->addWidget(m_infoLabel);
 
     // Создаем вкладку "Графики"
     QWidget *graphTab = new QWidget();
